@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" ?>
+<Dictionary>
+	<Words>
+		<Recognized>
+			<Word>Conf</Word>
+		</Recognized>
+		<DiscreteExceptions>
+		</DiscreteExceptions>
+	</Words>
+	<Acronyms>
+		<CasingExceptions>
+		</CasingExceptions>
+	</Acronyms>
+</Dictionary>
