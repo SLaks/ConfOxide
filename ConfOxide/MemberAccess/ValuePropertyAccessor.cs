@@ -14,21 +14,10 @@ namespace ConfOxide.MemberAccess {
 	///<summary>A PropertyAccessor for a scalar property.</summary>
 	public class ValuePropertyAccessor<TOwner, TProperty> : TypedPropertyAccessor<TOwner, TProperty>, IPropertyAccessor<TOwner> {
 		private readonly Action<TOwner, TProperty> setter;
-
 		private readonly TProperty defaultValue;
 
-		private readonly Func<TOwner, TOwner, bool> valueComparer;
 		internal ValuePropertyAccessor(PropertyInfo property) : base(property) {
 			setter = (Action<TOwner, TProperty>)Delegate.CreateDelegate(typeof(Action<TOwner, TProperty>), property.GetSetMethod());
-
-			var param = Expression.Parameter(typeof(TOwner));
-			var paramValue = Expression.Property(param, property);
-
-			var param2 = Expression.Parameter(typeof(TOwner));
-			valueComparer = Expression.Lambda<Func<TOwner, TOwner, bool>>(
-				Expression.Equal(paramValue, Expression.Property(param2, property)),
-				param, param2
-			).Compile();
 
 			var defaultAttr = property.GetCustomAttributes(typeof(DefaultValueAttribute), true).FirstOrDefault() as DefaultValueAttribute;
 			if (defaultAttr != null)
@@ -46,7 +35,9 @@ namespace ConfOxide.MemberAccess {
 		public void ResetValue(TOwner instance) { setter(instance, defaultValue); }
 
 		///<summary>Compares the values of the property from two owning objects.</summary>
-		public bool CompareValues(TOwner x, TOwner y) { return valueComparer(x, y); }
+		public bool CompareValues(TOwner x, TOwner y) {
+			return EqualityComparer<TProperty>.Default.Equals(GetValue(x), GetValue(y));
+		}
 
 		///<summary>Reads this property's value from a JSON token into an instance.</summary>
 		public void FromJson(TOwner instance, JToken token) {
