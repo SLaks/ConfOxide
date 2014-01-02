@@ -51,7 +51,9 @@
     <Compile Include="MemberAccess\IPropertyAccessor.cs" />
     <Compile Include="MemberAccess\CollectionPropertyAccessor.cs" />
     <Compile Include="MemberAccess\NestedPropertyAccessor.cs" />
+    <Compile Include="MemberAccess\TypedPropertyAccessor.cs" />
     <Compile Include="MemberAccess\TypeExtensions.cs" />
+    <Compile Include="MemberAccess\ScalarType.cs" />
     <Compile Include="MemberAccess\ValuePropertyAccessor.cs" />
     <Compile Include="SettingsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

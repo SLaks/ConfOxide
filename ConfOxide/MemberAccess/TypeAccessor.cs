@@ -37,7 +37,10 @@ namespace ConfOxide.MemberAccess {
 						prop
 					));
 				else if (prop.PropertyType.IsScalarType())
-					props.Add(new ValuePropertyAccessor<T>(prop));
+					props.Add((IPropertyAccessor<T>)Activator.CreateInstance(
+						typeof(ValuePropertyAccessor<,>).MakeGenericType(typeof(T), prop.PropertyType),
+						prop
+					));
 				else
 					errors.Add("Property " + prop.Name + " is of unrecognized type " + prop.PropertyType);
 			}
@@ -48,8 +51,8 @@ namespace ConfOxide.MemberAccess {
 	}
 	///<summary>A collection of strongly-typed property accessors, indexed by property name.</summary>
 	///<typeparam name="T">The type that owns the properties.</typeparam>
-	public class PropertyCollection<T> : KeyedCollection<string, ValuePropertyAccessor<T>> {
+	public class PropertyCollection<T> : KeyedCollection<string, IPropertyAccessor<T>> {
 		///<summary>Gets the dictionary key for the specified item.</summary>
-		protected override string GetKeyForItem(ValuePropertyAccessor<T> item) { return item.Property.Name; }
+		protected override string GetKeyForItem(IPropertyAccessor<T> item) { return item.Property.Name; }
 	}
 }
