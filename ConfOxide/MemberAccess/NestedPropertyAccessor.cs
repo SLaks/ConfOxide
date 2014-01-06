@@ -38,10 +38,16 @@ namespace ConfOxide.MemberAccess {
 
 		///<summary>Reads this property's value from a JSON token into an instance.</summary>
 		public void FromJson(TOwner instance, JToken token) {
+			GetValue(instance).ReadJson((JObject)token);
 		}
 
 		///<summary>Updates the value of a JProperty to reflect this property's value.</summary>
 		public void UpdateJsonProperty(TOwner instance, JProperty jsonProperty) {
+			var jobj = jsonProperty.Value as JObject;
+			if (jobj == null)
+				jsonProperty.Value = GetValue(instance).ToJson();
+			else
+				GetValue(instance).UpdateJson(jobj);
 		}
 	}
 }

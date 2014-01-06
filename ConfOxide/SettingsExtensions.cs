@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ConfOxide.MemberAccess;
+using Newtonsoft.Json.Linq;
 
 namespace ConfOxide {
 	///<summary>Contains basic pre-compiled operations for settings classes.</summary>
@@ -26,6 +27,55 @@ namespace ConfOxide {
 		public static void AssignFrom<T>(this T target, T source) where T : SettingsBase<T> {
 			foreach (var property in TypeAccessor<T>.Properties)
 				property.Copy(source, target);
+		}
+
+		///<summary>Updates a <see cref="SettingsBase{T}"/> instance from a JSON file.</summary>
+		public static void ReadJson<T>(this T target, JObject json) where T : SettingsBase<T> {
+			if (target == null) throw new ArgumentNullException("target");
+			if (json == null) throw new ArgumentNullException("json");
+
+			foreach (var sourceProperty in json.Properties()) {
+				IPropertyAccessor<T> targetProperty;
+				if (!TypeAccessor<T>.TryGetJsonProperty(sourceProperty.Name, out targetProperty))
+					continue;   // Skip extra properties
+				targetProperty.FromJson(target, sourceProperty);
+			}
+		}
+
+		///<summary>Updates an existing JSON document from a <see cref="SettingsBase{T}"/> instance.</summary>
+		/// <remarks>The order of any existing properties in the JSON objects will be preserved.</remarks>
+		public static void UpdateJson<T>(this T source, JObject json) where T : SettingsBase<T> {
+			if (source == null) throw new ArgumentNullException("source");
+			if (json == null) throw new ArgumentNullException("json");
+
+			var missingProperties = new HashSet<IPropertyAccessor<T>>(TypeAccessor<T>.Properties);
+
+			foreach (var jsonProperty in json.Properties()) {
+				IPropertyAccessor<T> sourceProperty;
+				if (!TypeAccessor<T>.TryGetJsonProperty(jsonProperty.Name, out sourceProperty))
+					continue;   // Ignore extra properties
+				sourceProperty.UpdateJsonProperty(source, jsonProperty);
+				missingProperties.Remove(sourceProperty);
+			}
+			foreach (var sourceProperty in missingProperties.OrderBy(p => p.JsonName)) {
+				var jsonProperty = new JProperty(sourceProperty.JsonName, null);
+				sourceProperty.UpdateJsonProperty(source, jsonProperty);
+				json.Add(jsonProperty);
+			}
+		}
+
+		///<summary>Serializes a <see cref="SettingsBase{T}"/> to a new JSON document.</summary>
+		/// <remarks>The properties in the JSON will be sorted alphabetically.</remarks>
+		public static JObject ToJson<T>(this T source) where T : SettingsBase<T> {
+			if (source == null) throw new ArgumentNullException("source");
+
+			var json = new JObject();
+			foreach (var sourceProperty in TypeAccessor<T>.Properties.OrderBy(p => p.JsonName)) {
+				var jsonProperty = new JProperty(sourceProperty.JsonName, null);
+				sourceProperty.UpdateJsonProperty(source, jsonProperty);
+				json.Add(jsonProperty);
+			}
+			return json;
 		}
 	}
 }
