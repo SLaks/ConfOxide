@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace ConfOxide.MemberAccess {
@@ -28,6 +29,11 @@ namespace ConfOxide.MemberAccess {
 			if (superInterface == null)
 				return null;
 			return superInterface.GetGenericArguments()[0];
+		}
+
+		///<summary>Gets a custom attribute, if defined on the specified member.</summary>
+		public static TAttribute GetCustomAttribute<TAttribute>(this ICustomAttributeProvider member) where TAttribute : Attribute{
+			return member.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;
 		}
 	}
 }

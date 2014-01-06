@@ -19,7 +19,7 @@ namespace ConfOxide.MemberAccess {
 		internal ValuePropertyAccessor(PropertyInfo property) : base(property) {
 			setter = (Action<TOwner, TProperty>)Delegate.CreateDelegate(typeof(Action<TOwner, TProperty>), property.GetSetMethod());
 
-			var defaultAttr = property.GetCustomAttributes(typeof(DefaultValueAttribute), true).FirstOrDefault() as DefaultValueAttribute;
+			var defaultAttr = property.GetCustomAttribute<DefaultValueAttribute>();
 			if (defaultAttr != null)
 				defaultValue = (TProperty)Convert.ChangeType(defaultAttr.Value, typeof(TProperty), CultureInfo.InvariantCulture);
 		}

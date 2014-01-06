@@ -7,6 +7,8 @@ namespace ConfOxide.MemberAccess {
 	public interface IPropertyAccessor<T> {
 		///<summary>Gets the property being accessed.</summary>
 		PropertyInfo Property { get; }
+		///<summary>Gets the name to use when serializing this property to JSON.</summary>
+		string JsonName { get; }
 
 		///<summary>Initializes the property, preparing it to hold actual data.  This is only called when the instance is first constructed.</summary>
 		void InitializeValue(T instance);

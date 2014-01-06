@@ -13,6 +13,13 @@ namespace ConfOxide.MemberAccess {
 	public static class TypeAccessor<T> {
 		///<summary>Gets all properties on this type that are supported settings properties.</summary>
 		public static ReadOnlyCollection<IPropertyAccessor<T>> Properties { get; private set; }
+		private static readonly Dictionary<string, IPropertyAccessor<T>> jsonKeyMap;
+
+		///<summary>Gets the property with the specified JSON serialization name, if any.</summary>
+		public static bool TryGetJsonProperty(string jsonName, out IPropertyAccessor<T> value) {
+			return jsonKeyMap.TryGetValue(jsonName, out value);
+		}
+
 
 		///<summary>Gets an error message describing properties of this type that are not recognized as settings properties, or null if the type has no errors.</summary>
 		public static string Error { get; private set; }
@@ -45,6 +52,7 @@ namespace ConfOxide.MemberAccess {
 					errors.Add("Property " + prop.Name + " is of unrecognized type " + prop.PropertyType);
 			}
 			Properties = new ReadOnlyCollection<IPropertyAccessor<T>>(props);
+			jsonKeyMap = Properties.ToDictionary(p => p.JsonName);
 			if (errors.Any())
 				Error = String.Join("\n", errors);
 		}
