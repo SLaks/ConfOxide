@@ -37,10 +37,10 @@ namespace ConfOxide.MemberAccess {
 				var elementType = prop.PropertyType.GetListElementType();
 				if (elementType != null)
 					props.Add((IPropertyAccessor<T>)Activator.CreateInstance(
-						typeof(NestedPropertyAccessor<,>).MakeGenericType(typeof(T), prop.PropertyType, elementType),
+						typeof(CollectionPropertyAccessor<,,>).MakeGenericType(typeof(T), prop.PropertyType, elementType),
 						prop
 					));
-				else if (prop.PropertyType.IsSubclassOf(typeof(SettingsBase<>).MakeGenericType(prop.PropertyType)))
+				else if (prop.PropertyType.IsSettingsType())
 					props.Add((IPropertyAccessor<T>)Activator.CreateInstance(
 						typeof(NestedPropertyAccessor<,>).MakeGenericType(typeof(T), prop.PropertyType),
 						prop

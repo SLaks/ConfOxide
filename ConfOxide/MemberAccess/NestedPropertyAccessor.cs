@@ -14,7 +14,8 @@ namespace ConfOxide.MemberAccess {
 		where TProperty : SettingsBase<TProperty> {
 		private readonly Action<TOwner> initializer;
 
-		internal NestedPropertyAccessor(PropertyInfo property) : base(property) {
+		///<summary>Creates a <see cref="NestedPropertyAccessor{TOwner, TProperty}"/> for the specified property.</summary>
+		public NestedPropertyAccessor(PropertyInfo property) : base(property) {
 			var param = Expression.Parameter(typeof(TOwner));
 			initializer = Expression.Lambda<Action<TOwner>>(
 				Expression.Call(param, property.GetSetMethod(), Expression.New(typeof(TProperty))),

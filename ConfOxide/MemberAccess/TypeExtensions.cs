@@ -21,6 +21,13 @@ namespace ConfOxide.MemberAccess {
 			return false;
 		}
 
+		///<summary>Checks whether a type inherits <see cref="SettingsBase{T}"/>.</summary>
+		public static bool IsSettingsType(this Type type) {
+			return type.BaseType.IsGenericType
+				&& type.BaseType.GetGenericTypeDefinition() == typeof(SettingsBase<>)
+				&& type.BaseType.GetGenericArguments()[0] == type;				
+		}
+
 		///<summary>Gets the element type of a type inheriting <see cref="IList{T}"/>, or null for non-List types.</summary>
 		public static Type GetListElementType(this Type type) {
 			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>))

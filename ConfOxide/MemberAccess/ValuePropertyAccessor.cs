@@ -16,7 +16,8 @@ namespace ConfOxide.MemberAccess {
 		private readonly Action<TOwner, TProperty> setter;
 		private readonly TProperty defaultValue;
 
-		internal ValuePropertyAccessor(PropertyInfo property) : base(property) {
+		///<summary>Creates a <see cref="ValuePropertyAccessor{TOwner, TProperty}"/> for the specified property.</summary>
+		public ValuePropertyAccessor(PropertyInfo property) : base(property) {
 			setter = (Action<TOwner, TProperty>)Delegate.CreateDelegate(typeof(Action<TOwner, TProperty>), property.GetSetMethod());
 
 			var defaultAttr = property.GetCustomAttribute<DefaultValueAttribute>();

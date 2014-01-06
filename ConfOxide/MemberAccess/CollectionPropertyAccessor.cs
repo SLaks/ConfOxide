@@ -16,7 +16,8 @@ namespace ConfOxide.MemberAccess {
 
 		private readonly Action<TOwner> initializer;
 
-		internal CollectionPropertyAccessor(PropertyInfo property) : base(property) {
+		///<summary>Creates a <see cref="CollectionPropertyAccessor{TOwner, TCollection, TValue}"/> for the specified property.</summary>
+		public CollectionPropertyAccessor(PropertyInfo property) : base(property) {
 			var param = Expression.Parameter(typeof(TOwner));
 
 			Expression creator;
