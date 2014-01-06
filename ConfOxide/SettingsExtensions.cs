@@ -29,6 +29,13 @@ namespace ConfOxide {
 				property.Copy(source, target);
 		}
 
+		///<summary>Creates a deep copy of a <see cref="SettingsBase{T}"/> object, holding the same values as the original.</summary>
+		public static T CreateCopy<T>(this T source) where T : SettingsBase<T> {
+			var retVal = TypeAccessor<T>.CreateInstance();
+			retVal.AssignFrom(source);
+			return retVal;
+		}
+
 		///<summary>Updates a <see cref="SettingsBase{T}"/> instance from a JSON file.</summary>
 		public static void ReadJson<T>(this T target, JObject json) where T : SettingsBase<T> {
 			if (target == null) throw new ArgumentNullException("target");

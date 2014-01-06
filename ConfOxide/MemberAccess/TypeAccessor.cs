@@ -20,6 +20,8 @@ namespace ConfOxide.MemberAccess {
 			return jsonKeyMap.TryGetValue(jsonName, out value);
 		}
 
+		///<summary>Creates a new instance of <typeparamref name="T"/>.</summary>
+		public static readonly Func<T> CreateInstance = Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
 
 		///<summary>Gets an error message describing properties of this type that are not recognized as settings properties, or null if the type has no errors.</summary>
 		public static string Error { get; private set; }
