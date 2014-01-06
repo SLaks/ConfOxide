@@ -21,8 +21,13 @@ namespace ConfOxide.MemberAccess {
 			setter = (Action<TOwner, TProperty>)Delegate.CreateDelegate(typeof(Action<TOwner, TProperty>), property.GetSetMethod());
 
 			var defaultAttr = property.GetCustomAttribute<DefaultValueAttribute>();
-			if (defaultAttr != null)
-				defaultValue = (TProperty)Convert.ChangeType(defaultAttr.Value, typeof(TProperty), CultureInfo.InvariantCulture);
+			if (defaultAttr != null) {
+				if (defaultAttr.Value != null)
+					defaultValue = (TProperty)Convert.ChangeType(defaultAttr.Value, Nullable.GetUnderlyingType(typeof(TProperty)) ?? typeof(TProperty), CultureInfo.InvariantCulture);
+				else if (typeof(TProperty).IsValueType && Nullable.GetUnderlyingType(typeof(TProperty)) == null)
+					throw new InvalidOperationException("Property " + property.DeclaringType.Name + "." + property.Name + " is not nullable and cannot default to null");
+				// If the default value is null, we don't need to do anything; default(TProperty) is already null.
+			}
 		}
 
 		///<summary>Copies the value of this property from one owning object to another.</summary>

@@ -8,7 +8,7 @@ namespace ConfOxide.MemberAccess {
 	///<summary>Contains extension methods for Type instances.</summary>
 	public static class TypeExtensions {
 
-		static readonly HashSet<Type> scalarTypes = new HashSet<Type> { typeof(string), typeof(DateTime), typeof(DateTimeOffset), typeof(TimeSpan), typeof(Uri) };
+		static readonly HashSet<Type> scalarTypes = new HashSet<Type> { typeof(decimal), typeof(string), typeof(DateTime), typeof(DateTimeOffset), typeof(TimeSpan), typeof(Uri) };
 		///<summary>Checks whether a type is valid as a single settings value.</summary>
 		public static bool IsScalarType(this Type type) {
 			if (type == typeof(string))
