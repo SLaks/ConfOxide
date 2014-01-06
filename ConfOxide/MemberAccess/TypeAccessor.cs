@@ -64,5 +64,28 @@ namespace ConfOxide.MemberAccess {
 	public class PropertyCollection<T> : KeyedCollection<string, IPropertyAccessor<T>> {
 		///<summary>Gets the dictionary key for the specified item.</summary>
 		protected override string GetKeyForItem(IPropertyAccessor<T> item) { return item.Property.Name; }
+
+		///<summary>Gets the value of the specified key, if present.</summary>
+		public bool TryGetValue(string key, out IPropertyAccessor<T> value) {
+			if (Dictionary != null)
+				return Dictionary.TryGetValue(key, out value);
+			value = this.FirstOrDefault(v => v.Property.Name == key);
+			return value != null;
+		}
+	}
+	///<summary>A collection of strongly-typed property accessors, indexed by property name.</summary>
+	///<typeparam name="T">The type that owns the properties.</typeparam>
+	public class ReadOnlyPropertyCollection<T> : ReadOnlyCollection<IPropertyAccessor<T>> {
+		private readonly PropertyCollection<T> inner;
+		///<summary>Creates a <see cref="ReadOnlyPropertyCollection{T}"/> wrapping a <see cref="PropertyCollection{T}"/>.</summary>
+		public ReadOnlyPropertyCollection(PropertyCollection<T> inner) : base(inner) { this.inner = inner; }
+
+		///<summary>Gets the value of the specified key, if present.</summary>
+		public bool TryGetValue(string key, out IPropertyAccessor<T> value) {
+			return inner.TryGetValue(key, out value);
+		}
+
+		///<summary>Gets the property with the specified key.</summary>
+		public IPropertyAccessor<T> this[string key] { get { return inner[key]; } }
 	}
 }
