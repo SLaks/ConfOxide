@@ -27,7 +27,7 @@ namespace ConfOxide.MemberAccess {
 		public void InitializeValue(TOwner instance) { initializer(instance); }
 
 		///<summary>Compares the values of the property from two owning objects.</summary>
-		public bool CompareValues(TOwner x, TOwner y) { return GetValue(x).EquivalentTo(GetValue(y)); }
+		public bool CompareValues(TOwner x, TOwner y) { return GetValue(x).IsEquivalentTo(GetValue(y)); }
 
 		///<summary>Copies the value of this property from one owning object to another.</summary>
 		///<param name="from">The instance to read the value from.</param>

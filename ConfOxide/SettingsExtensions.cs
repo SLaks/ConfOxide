@@ -13,7 +13,7 @@ namespace ConfOxide {
 	///</remarks>
 	public static class SettingsExtensions {
 		///<summary>Checks whether two <see cref="SettingsBase{T}"/> instances hold the same values.</summary>
-		public static bool EquivalentTo<T>(this T first, T second) where T : SettingsBase<T> {
+		public static bool IsEquivalentTo<T>(this T first, T second) where T : SettingsBase<T> {
 			return TypeAccessor<T>.Properties.All(p => p.CompareValues(first, second));
 		}
 		///<summary>Resets all settings on a <see cref="SettingsBase{T}"/> instance to their default values.</summary>
