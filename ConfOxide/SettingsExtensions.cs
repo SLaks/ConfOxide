@@ -45,7 +45,7 @@ namespace ConfOxide {
 				IPropertyAccessor<T> targetProperty;
 				if (!TypeAccessor<T>.TryGetJsonProperty(sourceProperty.Name, out targetProperty))
 					continue;   // Skip extra properties
-				targetProperty.FromJson(target, sourceProperty);
+				targetProperty.FromJson(target, sourceProperty.Value);
 			}
 		}
 

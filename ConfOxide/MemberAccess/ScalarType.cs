@@ -62,6 +62,8 @@ namespace ConfOxide.MemberAccess {
 
 		///<summary>Maps types that have no JToken constructor to types they're convertible to that do.</summary>
 		public static readonly Dictionary<Type, Type> JsonConvertibleTypes = new Dictionary<Type, Type> {
+			{ typeof(byte),     typeof(long)  },
+			{ typeof(sbyte),    typeof(long)  },
 			{ typeof(short),    typeof(long)  },
 			{ typeof(int),      typeof(long)  },
 			{ typeof(ushort),   typeof(ulong) },
