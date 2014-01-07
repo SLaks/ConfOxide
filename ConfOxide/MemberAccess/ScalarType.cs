@@ -47,10 +47,13 @@ namespace ConfOxide.MemberAccess {
 		}
 
 		///<summary>Converts an arbitrary non-null object into a strongly-typed value.</summary>
-		public static readonly Func<object, T> FromObject = underlyingType == typeof(TimeSpan)
-			// Avoiding this unnecessary box would be annoying, and this is init-time-only
-			? new Func<object, T>(o => o is TimeSpan ? (T)o : (T)(object)TimeSpan.Parse(o.ToString()))
-			: s => (T)Convert.ChangeType(s, underlyingType, CultureInfo.InvariantCulture);
+		public static readonly Func<object, T> FromObject =
+			  underlyingType == typeof(TimeSpan)
+				? o => o is TimeSpan ? (T)o : (T)(object)TimeSpan.Parse(o.ToString(), CultureInfo.InvariantCulture)
+			: underlyingType == typeof(DateTimeOffset)
+				? o => o is DateTimeOffset ? (T)o : (T)(object)DateTimeOffset.Parse(o.ToString(), CultureInfo.InvariantCulture)
+			: new Func<object, T>(o => (T)Convert.ChangeType(o, underlyingType, CultureInfo.InvariantCulture));
+		// Avoiding this unnecessary boxing would be annoying, and this is init-time-only
 	}
 	///<summary>Holds static fields used by <see cref="ScalarType{T}"/>.  Using a separate class prevents us from having one copy of the field for each type.</summary>
 	static class ScalarTypeInfo {
@@ -69,6 +72,7 @@ namespace ConfOxide.MemberAccess {
 			{ typeof(ushort),   typeof(ulong) },
 			{ typeof(uint),     typeof(ulong) },
 			{ typeof(decimal),  typeof(object)},        // TODO: Remove this https://github.com/JamesNK/Newtonsoft.Json/pull/183 is merged (for JValue(decimal) ctor)
+			{ typeof(DateTimeOffset),  typeof(object)},        // TODO: Remove this https://github.com/JamesNK/Newtonsoft.Json/pull/183 is merged (for JValue(decimal) ctor)
 		};
 	}
 }
