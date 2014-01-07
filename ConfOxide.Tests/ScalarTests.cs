@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 
 namespace ConfOxide.Tests {
 	[TestClass]
@@ -62,6 +64,52 @@ namespace ConfOxide.Tests {
 			var target = source.CreateCopy();
 			target.IsEquivalentTo(source).Should().BeTrue();
 			source.IsEquivalentTo(target).Should().BeTrue();
+		}
+
+		[TestMethod]
+		public void ScalarJsonRoundTrip() {
+			var instance = new DefaultValues {
+				DefNull = 84,
+				Greeting = "Hola",
+				Century = DateTime.Now,
+				DefZero = 12,
+				LongTime = TimeSpan.FromMinutes(3)
+			};
+			var copy = new DefaultValues();
+			copy.ReadJson(instance.ToJson());
+
+			copy.IsEquivalentTo(instance).Should().BeTrue();
+		}
+		[TestMethod]
+		public void JsonPreservesPropertyOrder() {
+			var json = JObject.Parse(@"{
+					""LongTime"": null,
+					""Greeting"": ""Bye"",
+					""DefNull"": 24					
+				}");
+			var instance = new DefaultValues {
+				DefNull = 84,
+				Greeting = "Hola",
+				DefZero = 12,
+				LongTime = TimeSpan.FromMinutes(3)
+			};
+			instance.ReadJson(json);
+
+			instance.LongTime.Should().NotHaveValue();
+			instance.DefNull.Should().Be(24);
+			instance.Greeting.Should().Be("Bye");
+
+			instance.UpdateJson(json);
+			json.Properties().Select(p => p.Name).Should().Equal(new[]
+			{
+				"LongTime",
+				"Greeting",
+				"DefNull",
+				"Century",
+				"ComplexConversions",
+				"DefFourtyTwo",
+				"DefZero",
+			});
 		}
 	}
 }
