@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
+using System.Globalization;
 using Newtonsoft.Json.Linq;
 
 namespace ConfOxide.MemberAccess {
@@ -45,6 +45,12 @@ namespace ConfOxide.MemberAccess {
 				);
 			return Expression.Lambda<Func<T, JValue>>(outerValue, param).Compile();
 		}
+
+		///<summary>Converts an arbitrary non-null object into a strongly-typed value.</summary>
+		public static readonly Func<object, T> FromObject = underlyingType == typeof(TimeSpan)
+			// Avoiding this unnecessary box would be annoying, and this is init-time-only
+			? new Func<object, T>(o => o is TimeSpan ? (T)o : (T)(object)TimeSpan.Parse(o.ToString()))
+			: s => (T)Convert.ChangeType(s, underlyingType, CultureInfo.InvariantCulture);
 	}
 	///<summary>Holds static fields used by <see cref="ScalarType{T}"/>.  Using a separate class prevents us from having one copy of the field for each type.</summary>
 	static class ScalarTypeInfo {

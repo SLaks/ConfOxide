@@ -23,7 +23,7 @@ namespace ConfOxide.MemberAccess {
 			var defaultAttr = property.GetCustomAttribute<DefaultValueAttribute>();
 			if (defaultAttr != null) {
 				if (defaultAttr.Value != null)
-					defaultValue = (TProperty)Convert.ChangeType(defaultAttr.Value, Nullable.GetUnderlyingType(typeof(TProperty)) ?? typeof(TProperty), CultureInfo.InvariantCulture);
+					defaultValue = ScalarType<TProperty>.FromObject(defaultAttr.Value);
 				else if (typeof(TProperty).IsValueType && Nullable.GetUnderlyingType(typeof(TProperty)) == null)
 					throw new InvalidOperationException("Property " + property.DeclaringType.Name + "." + property.Name + " is not nullable and cannot default to null");
 				// If the default value is null, we don't need to do anything; default(TProperty) is already null.
