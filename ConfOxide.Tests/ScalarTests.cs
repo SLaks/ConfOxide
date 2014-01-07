@@ -9,6 +9,9 @@ namespace ConfOxide.Tests {
 		sealed class DefaultValues : SettingsBase<DefaultValues> {
 			[DefaultValue(null)]
 			public byte? DefNull { get; set; }
+
+			[DefaultValue("67")]
+			public ushort? ComplexConversions { get; set; }
 			public int DefZero { get; set; }
 			[DefaultValue("42.1234")]
 			public decimal? DefFourtyTwo { get; set; }
@@ -16,6 +19,8 @@ namespace ConfOxide.Tests {
 			public string Greeting { get; set; }
 			[DefaultValue("2000-01-01")]
 			public DateTime Century { get; set; }
+			[DefaultValue("02:00:00")]
+			public TimeSpan? LongTime { get; set; }
 		}
 
 		[TestMethod]
@@ -26,6 +31,7 @@ namespace ConfOxide.Tests {
 			instance.DefFourtyTwo.Should().Be(42.1234m);
 			instance.Greeting.Should().Be("Hello");
 			instance.Century.Should().Be(new DateTime(2000, 01, 01));
+			instance.LongTime.Should().Be(TimeSpan.FromHours(2));
 		}
 
 		[TestMethod]
@@ -37,6 +43,7 @@ namespace ConfOxide.Tests {
 			instance.DefZero.Should().Be(0);
 			instance.Greeting.Should().Be("Hello");
 			instance.Century.Should().Be(new DateTime(2000, 01, 01));
+			instance.LongTime.Should().Be(TimeSpan.FromHours(2));
 		}
 
 		[TestMethod]
