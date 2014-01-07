@@ -32,7 +32,7 @@ namespace ConfOxide.MemberAccess {
 		///<summary>Copies the value of this property from one owning object to another.</summary>
 		///<param name="from">The instance to read the value from.</param>
 		///<param name="to">The instance to write the value to.</param>
-		public void Copy(TOwner from, TOwner to) { GetValue(to).AssignFrom(GetValue(to)); }
+		public void Copy(TOwner from, TOwner to) { GetValue(to).AssignFrom(GetValue(from)); }
 
 		///<summary>Resets the value of this property on an owning object to its default value.</summary>
 		public void ResetValue(TOwner instance) { GetValue(instance).ResetValues(); }
