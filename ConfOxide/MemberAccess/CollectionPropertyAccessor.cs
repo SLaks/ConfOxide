@@ -27,7 +27,7 @@ namespace ConfOxide.MemberAccess {
 				creator = Expression.New(typeof(TCollection));
 
 			initializer = Expression.Lambda<Action<TOwner>>(
-				Expression.Call(param, property.GetSetMethod(), creator),
+				Expression.Call(param, property.GetSetMethod(true), creator),
 				param
 			).Compile();
 		}

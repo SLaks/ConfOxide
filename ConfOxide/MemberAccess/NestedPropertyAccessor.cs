@@ -18,7 +18,7 @@ namespace ConfOxide.MemberAccess {
 		public NestedPropertyAccessor(PropertyInfo property) : base(property) {
 			var param = Expression.Parameter(typeof(TOwner));
 			initializer = Expression.Lambda<Action<TOwner>>(
-				Expression.Call(param, property.GetSetMethod(), Expression.New(typeof(TProperty))),
+				Expression.Call(param, property.GetSetMethod(true), Expression.New(typeof(TProperty))),
 				param
 			).Compile();
 		}
