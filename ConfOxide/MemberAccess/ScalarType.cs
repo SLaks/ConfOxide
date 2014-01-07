@@ -48,10 +48,10 @@ namespace ConfOxide.MemberAccess {
 	}
 	///<summary>Holds static fields used by <see cref="ScalarType{T}"/>.  Using a separate class prevents us from having one copy of the field for each type.</summary>
 	static class ScalarTypeInfo {
-		static readonly ConstructorInfo nullJValueCtor = typeof(JValue).GetConstructor(new[] { typeof(object), typeof(JTokenType) });
+		static readonly ConstructorInfo nullJValueCtor = typeof(JValue).GetConstructor(new[] { typeof(object) });
 		public static readonly Expression JNull = Expression.New(
 			nullJValueCtor,
-			Expression.Constant(null), Expression.Constant(JTokenType.Null)
+			Expression.Constant(null)
 		);
 
 		///<summary>Maps types that have no JToken constructor to types they're convertible to that do.</summary>
