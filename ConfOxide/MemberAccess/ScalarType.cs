@@ -30,9 +30,6 @@ namespace ConfOxide.MemberAccess {
 			Type convertTo;
 			if (ScalarTypeInfo.JsonConvertibleTypes.TryGetValue(underlyingType, out convertTo))
 				innerValue = Expression.Convert(innerValue, convertTo);
-			if (underlyingType == typeof(TimeSpan))
-				innerValue = Expression.Call(innerValue, "ToString", null);
-
 			innerValue = Expression.New(typeof(JValue).GetConstructor(new[] { convertTo ?? underlyingType }), innerValue);
 
 			Expression outerValue;
