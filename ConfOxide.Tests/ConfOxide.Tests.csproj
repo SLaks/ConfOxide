@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="ScalarTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CollectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

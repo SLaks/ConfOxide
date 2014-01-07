@@ -64,6 +64,11 @@ namespace ConfOxide.Tests {
 			var target = source.CreateCopy();
 			target.IsEquivalentTo(source).Should().BeTrue();
 			source.IsEquivalentTo(target).Should().BeTrue();
+
+			target.DefFourtyTwo = null;
+
+			target.IsEquivalentTo(source).Should().BeFalse();
+			source.IsEquivalentTo(target).Should().BeFalse();
 		}
 
 		[TestMethod]
