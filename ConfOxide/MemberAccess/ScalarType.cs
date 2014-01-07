@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 namespace ConfOxide.MemberAccess {
 	///<summary>Holds compiled delegates that interact with strongly-typed scalar values.</summary>
 	static class ScalarType<T> {
+		private static readonly Type underlyingType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+
 		///<summary>Creates a <see cref="JValue"/> holding a strongly typed value.</summary>
 		public static readonly Func<T, JValue> ToJson = CreateJsonAccessor();
 
@@ -22,11 +24,12 @@ namespace ConfOxide.MemberAccess {
 
 		private static Func<T, JValue> CreateJsonAccessor() {
 			var param = Expression.Parameter(typeof(T));
-			//TODO: Investigate performance of boxing vs. string conversions in JSON.Net.
+
 			// The value to pass to the JValue ctor
 			Expression innerValue = param;
+			if (underlyingType != typeof(T))
+				innerValue = Expression.Property(innerValue, "Value");
 
-			Type underlyingType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
 			Type convertTo;
 			if (ScalarTypeInfo.JsonConvertibleTypes.TryGetValue(underlyingType, out convertTo))
 				innerValue = Expression.Convert(innerValue, convertTo);
