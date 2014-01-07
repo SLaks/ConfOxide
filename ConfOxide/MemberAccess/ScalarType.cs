@@ -60,6 +60,7 @@ namespace ConfOxide.MemberAccess {
 			{ typeof(int),      typeof(long)  },
 			{ typeof(ushort),   typeof(ulong) },
 			{ typeof(uint),     typeof(ulong) },
+			{ typeof(decimal),  typeof(object)},        // TODO: Remove this https://github.com/JamesNK/Newtonsoft.Json/pull/183 is merged (for JValue(decimal) ctor)
 		};
 	}
 }
