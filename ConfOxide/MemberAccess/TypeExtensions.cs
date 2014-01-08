@@ -26,7 +26,7 @@ namespace ConfOxide.MemberAccess {
 			if (!type.BaseType.IsGenericType)
 				return false;
 			if (type.BaseType.GetGenericTypeDefinition() == typeof(SettingsBase<>)
-			 && type.BaseType.GetGenericArguments()[0] == type)
+			 && type.BaseType.GetGenericArguments()[0] == (type.IsGenericTypeDefinition ? type.GetGenericArguments()[0] : type))
 				return true;
 			if (type.BaseType.GetGenericTypeDefinition().IsSettingsType())
 				return true;
