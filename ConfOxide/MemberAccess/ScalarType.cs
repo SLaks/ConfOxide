@@ -14,6 +14,7 @@ namespace ConfOxide.MemberAccess {
 		///<summary>Creates a <see cref="JValue"/> holding a strongly typed value.</summary>
 		public static readonly Func<T, JValue> ToJson = CreateJsonAccessor();
 
+		// https://connect.microsoft.com/VisualStudio/feedback/details/697908/expression-trees-no-coercion-operator-is-defined-between-types
 		// This must be declared as JToken because Expression.Convert() won't search parent types.
 		private static readonly ParameterExpression jParam = Expression.Parameter(typeof(JToken));
 		///<summary>Parses a <see cref="JValue"/> value into a strongly-typed value.</summary>

@@ -23,9 +23,14 @@ namespace ConfOxide.MemberAccess {
 
 		///<summary>Checks whether a type inherits <see cref="SettingsBase{T}"/>.</summary>
 		public static bool IsSettingsType(this Type type) {
-			return type.BaseType.IsGenericType
-				&& type.BaseType.GetGenericTypeDefinition() == typeof(SettingsBase<>)
-				&& type.BaseType.GetGenericArguments()[0] == type;				
+			if (!type.BaseType.IsGenericType)
+				return false;
+			if (type.BaseType.GetGenericTypeDefinition() == typeof(SettingsBase<>)
+			 && type.BaseType.GetGenericArguments()[0] == type)
+				return true;
+			if (type.BaseType.GetGenericTypeDefinition().IsSettingsType())
+				return true;
+			return false;
 		}
 
 		///<summary>Gets the element type of a type inheriting <see cref="IList{T}"/>, or null for non-List types.</summary>
@@ -39,7 +44,7 @@ namespace ConfOxide.MemberAccess {
 		}
 
 		///<summary>Gets a custom attribute, if defined on the specified member.</summary>
-		public static TAttribute GetCustomAttribute<TAttribute>(this ICustomAttributeProvider member) where TAttribute : Attribute{
+		public static TAttribute GetCustomAttribute<TAttribute>(this ICustomAttributeProvider member) where TAttribute : Attribute {
 			return member.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;
 		}
 	}
