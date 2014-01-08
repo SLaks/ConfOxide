@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace ConfOxide.Tests {
@@ -115,6 +117,30 @@ namespace ConfOxide.Tests {
 				"DefFourtyTwo",
 				"DefZero",
 			});
+		}
+
+		sealed class JsonNames : SettingsBase<JsonNames> {
+			[JsonProperty("myDate")]
+			public DateTimeOffset? NullDate { get; set; }
+			[DefaultValue(67)]
+			[DataMember(Name = "myNum")]
+			public decimal DefValue { get; set; }
+		}
+		[TestMethod]
+		public void JsonPropertyNames() {
+			var instance = new JsonNames();
+			instance.ToJson()
+					.Properties()
+					.Select(p => p.Name)
+					.Should().Equal(new[] { "myDate", "myNum" });
+
+			var json = JObject.Parse(@"{
+				""myNum"": 24,
+				""myDate"": ""2012-11-10""
+			}");
+			instance.ReadJson(json);
+			instance.DefValue.Should().Be(24);
+			instance.NullDate.Should().Be(new DateTimeOffset(new DateTime(2012, 11, 10)));
 		}
 	}
 }
