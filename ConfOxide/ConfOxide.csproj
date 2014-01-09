@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MemberAccess\SettingsCollectionPropertyAccessor.cs" />
     <Compile Include="MemberAccess\IPropertyAccessor.cs" />
     <Compile Include="MemberAccess\CollectionPropertyAccessor.cs" />
     <Compile Include="MemberAccess\NestedPropertyAccessor.cs" />

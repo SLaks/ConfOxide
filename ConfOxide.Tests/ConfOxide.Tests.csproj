@@ -59,6 +59,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SettingsCollectionTests.cs" />
     <Compile Include="InheritanceTests.cs" />
     <Compile Include="ScalarTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
