@@ -40,6 +40,11 @@ namespace ConfOxide.MemberAccess {
 			var propInfos = typeof(T).GetProperties();
 			var props = new List<IPropertyAccessor<T>>(propInfos.Length);
 			foreach (var prop in propInfos) {
+				if (prop.PropertyType.IsArray) {
+					errors.Add("Array types are not supported (since they aren't resizable).  Instead, use List<T>.");
+					return;
+				}
+
 				var elementType = prop.PropertyType.GetListElementType();
 				if (elementType != null)
 					props.Add((IPropertyAccessor<T>)Activator.CreateInstance(
