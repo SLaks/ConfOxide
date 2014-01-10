@@ -20,6 +20,7 @@ namespace ConfOxide {
 		public static void ResetValues<T>(this T instance) where T : SettingsBase<T> {
 			foreach (var property in TypeAccessor<T>.Properties)
 				property.ResetValue(instance);
+			instance.ResetCustom();
 		}
 		///<summary>Copies all settings from one <see cref="SettingsBase{T}"/> instance to another.</summary>
 		///<param name="target">The instance to write the values to.</param>

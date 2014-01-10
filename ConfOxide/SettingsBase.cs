@@ -35,5 +35,11 @@ namespace ConfOxide {
 			}
 			t.ResetValues();
 		}
+
+		///<summary>
+		/// Called by <see cref="SettingsExtensions.ResetValues{T}(T)"/> after resetting all properties.  
+		/// Derived classes can override this method to apply custom default values (eg, for collection properties).
+		///</summary>
+		protected internal virtual void ResetCustom() { }
 	}
 }
