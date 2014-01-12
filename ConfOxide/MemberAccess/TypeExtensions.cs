@@ -11,10 +11,8 @@ namespace ConfOxide.MemberAccess {
 		static readonly HashSet<Type> scalarTypes = new HashSet<Type> { typeof(decimal), typeof(string), typeof(DateTime), typeof(DateTimeOffset), typeof(TimeSpan), typeof(Uri) };
 		///<summary>Checks whether a type is valid as a single settings value.</summary>
 		public static bool IsScalarType(this Type type) {
-			if (type == typeof(string))
-				return true;
 			type = Nullable.GetUnderlyingType(type) ?? type;
-			if (type.IsPrimitive)
+			if (type.IsPrimitive || type.IsEnum)
 				return true;
 			if (scalarTypes.Contains(type))
 				return true;

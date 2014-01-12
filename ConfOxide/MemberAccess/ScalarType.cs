@@ -18,10 +18,12 @@ namespace ConfOxide.MemberAccess {
 		// This must be declared as JToken because Expression.Convert() won't search parent types.
 		private static readonly ParameterExpression jParam = Expression.Parameter(typeof(JToken));
 		///<summary>Parses a <see cref="JValue"/> value into a strongly-typed value.</summary>
-		public static readonly Func<JValue, T> FromJson = Expression.Lambda<Func<JToken, T>>(
-			Expression.Convert(jParam, typeof(T)),
-			jParam
-		).Compile();
+		public static readonly Func<JValue, T> FromJson = underlyingType.IsEnum
+			? jv => jv.Type == JTokenType.Null ? default(T) : (T)Enum.Parse(underlyingType, (string)jv, ignoreCase: true)
+			: Expression.Lambda<Func<JToken, T>>(
+				Expression.Convert(jParam, typeof(T)),
+				jParam
+			).Compile();
 
 		private static Func<T, JValue> CreateJsonAccessor() {
 			var param = Expression.Parameter(typeof(T));
@@ -34,6 +36,8 @@ namespace ConfOxide.MemberAccess {
 			Type convertTo;
 			if (ScalarTypeInfo.JsonConvertibleTypes.TryGetValue(underlyingType, out convertTo))
 				innerValue = Expression.Convert(innerValue, convertTo);
+			if (underlyingType.IsEnum)
+				innerValue = Expression.Call(innerValue, "ToString", null); //TODO: Store enum name map / array for better perf
 			innerValue = Expression.New(typeof(JValue).GetConstructor(new[] { convertTo ?? underlyingType }), innerValue);
 
 			Expression outerValue;
@@ -49,7 +53,9 @@ namespace ConfOxide.MemberAccess {
 
 		///<summary>Converts an arbitrary non-null object into a strongly-typed value.</summary>
 		public static readonly Func<object, T> FromObject =
-			  underlyingType == typeof(TimeSpan)
+			underlyingType.IsEnum
+				? o => o is string ? (T)Enum.Parse(underlyingType, (string)o, ignoreCase: true) : (T)Enum.ToObject(underlyingType, o)
+			: underlyingType == typeof(TimeSpan)
 				? o => o is TimeSpan ? (T)o : (T)(object)TimeSpan.Parse(o.ToString(), CultureInfo.InvariantCulture)
 			: underlyingType == typeof(DateTimeOffset)
 				? o => o is DateTimeOffset ? (T)o : (T)(object)DateTimeOffset.Parse(o.ToString(), CultureInfo.InvariantCulture)

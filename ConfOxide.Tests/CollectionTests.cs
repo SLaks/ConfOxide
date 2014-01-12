@@ -12,6 +12,8 @@ namespace ConfOxide.Tests {
 			public IList<int> Numbers { get; private set; }
 			public Collection<TimeSpan> Times { get; private set; }
 			public ReadOnlyCollectionBuilder<decimal?> Rates { get; private set; }
+
+			public List<DayOfWeek> Days { get; private set; }
 		}
 		[TestMethod]
 		public void CollectionInstantiation() {
@@ -39,12 +41,14 @@ namespace ConfOxide.Tests {
 			var instance = new MyModel {
 				Numbers = { 1, 2, 3 },
 				Rates = { .1234m, .5678m },
-				Times = { TimeSpan.FromHours(1), TimeSpan.FromHours(2) }
+				Times = { TimeSpan.FromHours(1), TimeSpan.FromHours(2) },
+				Days = { DayOfWeek.Monday, DayOfWeek.Thursday }
 			};
 			var instance2 = new MyModel {
 				Numbers = { 1, 2, 3 },
 				Rates = { .1234m, .5678m },
-				Times = { TimeSpan.FromHours(1), TimeSpan.FromHours(2) }
+				Times = { TimeSpan.FromHours(1), TimeSpan.FromHours(2) },
+				Days = { DayOfWeek.Monday, DayOfWeek.Thursday }
 			};
 			instance.IsEquivalentTo(instance2).Should().BeTrue();
 			instance2.IsEquivalentTo(instance).Should().BeTrue();
@@ -79,8 +83,8 @@ namespace ConfOxide.Tests {
 				Times = { TimeSpan.FromHours(1), TimeSpan.FromHours(2) }
 			};
 			var target = new MyModel {
-				Numbers = { 4,5,6 },
-				Rates = { 99999999999,8888888888 },
+				Numbers = { 4, 5, 6 },
+				Rates = { 99999999999, 8888888888 },
 				Times = { TimeSpan.MinValue, TimeSpan.MaxValue }
 			};
 			target.AssignFrom(instance);

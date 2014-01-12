@@ -44,7 +44,7 @@ ConfOxide also includes helper methods to read and write JSON files from disk.  
 These methods are particularly useful when creating cancellable Options dialogs.  You can call `settingsCreateCopy()` to bind your options dialog to a deep copy of the settings class, call `copy.IsEquivalentTo(copy)` to check whether there are any changes to apply, and call `settings.AssignFrom(copy)` to apply changes when clicking OK.
 
 ##Supported types
-ConfOxide supports properties of all basic .Net types, including primitive numeric types, `decimal`, `string`, `DateTime`, `DateTimeOffset`, and `TimeSpan`, as well as nullable types thereof.
+ConfOxide supports properties of all basic .Net types, including primitive numeric types, `decimal`, `string`, `DateTime`, `DateTimeOffset`, and `TimeSpan`, all enums, as well as nullable types thereof.
 Properties containing other `SettingsBase<T>` classes are also supported, as long as there are no circular dependencies.
 ConfOxide also supports collection properties of other `SettingsBae<T>` classes or of supported scalar types.  You can use any collection class that is writable, variable-sized, and has a default constructor.  If you make a property of type `IList<T>`, ConfOxide will create a `List<T>` to assign to the property.  Note that arrays are not supported.
 

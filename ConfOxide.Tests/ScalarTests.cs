@@ -10,9 +10,19 @@ using Newtonsoft.Json.Linq;
 namespace ConfOxide.Tests {
 	[TestClass]
 	public class ScalarTests {
+		enum MyOption {
+			None,
+			Partial = 123456,
+			Full = 654321
+		}
+
 		sealed class DefaultValues : SettingsBase<DefaultValues> {
 			[DefaultValue(null)]
 			public byte? DefNull { get; set; }
+
+			[DefaultValue(MyOption.Full)]
+			public MyOption StandardLevel { get; set; }
+			public MyOption? ExtraLevel { get; set; }
 
 			[DefaultValue("67")]
 			public ushort? ComplexConversions { get; set; }
@@ -31,6 +41,8 @@ namespace ConfOxide.Tests {
 		public void ScalarDefaultValues() {
 			var instance = new DefaultValues();
 			instance.DefNull.Should().NotHaveValue();
+			instance.StandardLevel.Should().Be(MyOption.Full);
+			instance.ExtraLevel.Should().BeNull();
 			instance.DefZero.Should().Be(0);
 			instance.DefFourtyTwo.Should().Be(42.1234m);
 			instance.Greeting.Should().Be("Hello");
@@ -67,7 +79,7 @@ namespace ConfOxide.Tests {
 			target.IsEquivalentTo(source).Should().BeTrue();
 			source.IsEquivalentTo(target).Should().BeTrue();
 
-			target.DefFourtyTwo = null;
+			target.ExtraLevel = MyOption.Partial;
 
 			target.IsEquivalentTo(source).Should().BeFalse();
 			source.IsEquivalentTo(target).Should().BeFalse();
@@ -92,6 +104,8 @@ namespace ConfOxide.Tests {
 			var json = JObject.Parse(@"{
 					""LongTime"": null,
 					""Greeting"": ""Bye"",
+					""ExtraLevel"": ""Partial"",
+					""StandardLevel"": 123456,
 					""DefNull"": 24					
 				}");
 			var instance = new DefaultValues {
@@ -102,6 +116,8 @@ namespace ConfOxide.Tests {
 			};
 			instance.ReadJson(json);
 
+			instance.ExtraLevel.Should().Be(MyOption.Partial);
+			instance.StandardLevel.Should().Be(MyOption.Partial);
 			instance.LongTime.Should().NotHaveValue();
 			instance.DefNull.Should().Be(24);
 			instance.Greeting.Should().Be("Bye");
@@ -111,6 +127,8 @@ namespace ConfOxide.Tests {
 			{
 				"LongTime",
 				"Greeting",
+				"ExtraLevel",
+				"StandardLevel",
 				"DefNull",
 				"Century",
 				"ComplexConversions",
