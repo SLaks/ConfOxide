@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ConfOxide")]
-[assembly: AssemblyDescription("DRY config classes & persistence")]
+[assembly: AssemblyDescription("Fast, DRY, strongly-typed configuration system for C# projects.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SLaks")]
 [assembly: AssemblyProduct("ConfOxide")]

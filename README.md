@@ -1,6 +1,8 @@
 #ConfOxide
 ConfOxide is a library for writing settings classes.  You can define your classes using simple C# auto-implemented properties, and ConfOxide will let you easily clone them, compare them, reset them, or save them to (and load them from) JSON files.
 
+Install ConfOxide from [NuGet](https://www.nuget.org/packages/ConfOxide/).
+
 #Example
 First, create a settings class:
 
@@ -78,3 +80,6 @@ sealed class MyAppSettings : VersionedSettingsBase<MyAppSettings> {
 
  - **Q: What about XML?**<br />
      A: If enough people are interested in serializing to XML in addition to JSON, I'll add support for that.
+
+#License
+[MIT](http://opensource.org/licenses/MIT)
