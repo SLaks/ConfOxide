@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/SLaks/ConfOxide/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>Add support for enum properties &amp; collections.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>JSON settings configuration options serialization DRY</tags>
     <dependencies>
