@@ -23,6 +23,24 @@ sealed class MyAppSettings : SettingsBase<MyAppSettings> {
 
 Note that concrete settings classes must be `sealed`.  To create an inheritable settings class, you must add a type parameter; see below.
 
+##Usage
+To create a new settings type, just write `new MyAppSettings()`.  All collection & settings properties will be initialized to new instances, and all properties will be set to their default values.  All settings methods are implemented as extension methods in the `ConfOxide.SettingsExtensions` class (for performance reasons); to call these methods, you will need to add `using ConfOxide`.
+
+##Working with JSON documents
+ - To read a settings file from JSON, call `settings.ReadJson(json)` and pass a JSON.net `JObject` instance with the data to read.
+ - To update a JSON object from an existing settings instance, call `settings.UpdateJson(json)` and pass the `JObject` to update.  The existing property order, as well as any extra properties, will be preserved.
+ - To create a new JSON object from an existing settings instance, call `settings.ToJson()`.
+
+##Working with JSON files
+ConfOxide also includes helper methods to read and write JSON files from disk.  Call `settings.ReadJsonFile(filename)` to read an existing JSON file, if it exists.  Call `settings.WriteJsonFile(filename)` to create or update a JSON file from the settings object
+
+##Working with Settings instances
+ - Call `settings.IsEquivalentTo(otherSettings)` to check whether two settings instances hold the same values.  This is a deep comparison that will recursively compare collections and nested settings objects by value.
+ - Call `settings.AssignFrom(sourceSettings)` to deeply assign the values from one settings instance to another.
+ - Call `settings.CreateCopy()` to create a deep clone of a settings instance.  (this is shorthand for `new YourSettingsClass().AssignFrom(settings)`
+
+These methods are particularly useful when creating cancellable Options dialogs.  You can call `settingsCreateCopy()` to bind your options dialog to a deep copy of the settings class, call `copy.IsEquivalentTo(copy)` to check whether there are any changes to apply, and call `settings.AssignFrom(copy)` to apply changes when clicking OK.
+
 ##Supported types
 ConfOxide supports properties of all basic .Net types, including primitive numeric types, `decimal`, `string`, `DateTime`, `DateTimeOffset`, and `TimeSpan`, as well as nullable types thereof.
 Properties containing other `SettingsBase<T>` classes are also supported, as long as there are no circular dependencies.
