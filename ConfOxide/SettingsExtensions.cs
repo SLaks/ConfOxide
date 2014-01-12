@@ -39,7 +39,7 @@ namespace ConfOxide {
 			return TypeAccessor<T>.CreateInstance().AssignFrom(source);
 		}
 
-		///<summary>Updates a <see cref="SettingsBase{T}"/> instance from a JSON file.</summary>
+		///<summary>Updates a <see cref="SettingsBase{T}"/> instance from a JSON object.</summary>
 		///<returns>The <paramref name="target"/> instance, for chaining.</returns>
 		public static T ReadJson<T>(this T target, JObject json) where T : SettingsBase<T> {
 			if (target == null) throw new ArgumentNullException("target");
