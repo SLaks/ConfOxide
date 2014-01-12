@@ -17,28 +17,31 @@ namespace ConfOxide {
 			return TypeAccessor<T>.Properties.All(p => p.CompareValues(first, second));
 		}
 		///<summary>Resets all settings on a <see cref="SettingsBase{T}"/> instance to their default values.</summary>
-		public static void ResetValues<T>(this T instance) where T : SettingsBase<T> {
+		///<returns>The <paramref name="instance"/>, for chaining.</returns>
+		public static T ResetValues<T>(this T instance) where T : SettingsBase<T> {
 			foreach (var property in TypeAccessor<T>.Properties)
 				property.ResetValue(instance);
 			instance.ResetCustom();
+			return instance;
 		}
 		///<summary>Copies all settings from one <see cref="SettingsBase{T}"/> instance to another.</summary>
 		///<param name="target">The instance to write the values to.</param>
 		///<param name="source">The instance to read the values from.</param>
-		public static void AssignFrom<T>(this T target, T source) where T : SettingsBase<T> {
+		///<returns>The <paramref name="target"/> instance, for chaining.</returns>
+		public static T AssignFrom<T>(this T target, T source) where T : SettingsBase<T> {
 			foreach (var property in TypeAccessor<T>.Properties)
 				property.Copy(source, target);
+			return target;
 		}
 
 		///<summary>Creates a deep copy of a <see cref="SettingsBase{T}"/> object, holding the same values as the original.</summary>
 		public static T CreateCopy<T>(this T source) where T : SettingsBase<T> {
-			var retVal = TypeAccessor<T>.CreateInstance();
-			retVal.AssignFrom(source);
-			return retVal;
+			return TypeAccessor<T>.CreateInstance().AssignFrom(source);
 		}
 
 		///<summary>Updates a <see cref="SettingsBase{T}"/> instance from a JSON file.</summary>
-		public static void ReadJson<T>(this T target, JObject json) where T : SettingsBase<T> {
+		///<returns>The <paramref name="target"/> instance, for chaining.</returns>
+		public static T ReadJson<T>(this T target, JObject json) where T : SettingsBase<T> {
 			if (target == null) throw new ArgumentNullException("target");
 			if (json == null) throw new ArgumentNullException("json");
 
@@ -48,11 +51,13 @@ namespace ConfOxide {
 					continue;   // Skip extra properties
 				targetProperty.FromJson(target, sourceProperty.Value);
 			}
+			return target;
 		}
 
 		///<summary>Updates an existing JSON document from a <see cref="SettingsBase{T}"/> instance.</summary>
-		/// <remarks>The order of any existing properties in the JSON objects will be preserved.</remarks>
-		public static void UpdateJson<T>(this T source, JObject json) where T : SettingsBase<T> {
+		///<returns>The <paramref name="source"/> instance, for chaining.</returns>
+		///<remarks>The order of any existing properties in the JSON objects will be preserved.</remarks>
+		public static T UpdateJson<T>(this T source, JObject json) where T : SettingsBase<T> {
 			if (source == null) throw new ArgumentNullException("source");
 			if (json == null) throw new ArgumentNullException("json");
 
@@ -70,6 +75,7 @@ namespace ConfOxide {
 				sourceProperty.UpdateJsonProperty(source, jsonProperty);
 				json.Add(jsonProperty);
 			}
+			return source;
 		}
 
 		///<summary>Serializes a <see cref="SettingsBase{T}"/> to a new JSON document.</summary>
