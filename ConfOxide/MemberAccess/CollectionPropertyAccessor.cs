@@ -11,7 +11,7 @@ namespace ConfOxide.MemberAccess {
 	///<summary>A PropertyAccessor for a property that holds a generic collection of a scalar type.</summary>
 	public class CollectionPropertyAccessor<TOwner, TCollection, TValue> :
 		TypedPropertyAccessor<TOwner, TCollection>,
-		IPropertyAccessor<TOwner>
+		ITypedPropertyAccessor<TOwner, TCollection>
 		where TCollection : IList<TValue> {
 
 		private readonly Action<TOwner> initializer;

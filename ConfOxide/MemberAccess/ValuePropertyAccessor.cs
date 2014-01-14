@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 namespace ConfOxide.MemberAccess {
 
 	///<summary>A PropertyAccessor for a scalar property.</summary>
-	public class ValuePropertyAccessor<TOwner, TProperty> : TypedPropertyAccessor<TOwner, TProperty>, IPropertyAccessor<TOwner> {
+	public class ValuePropertyAccessor<TOwner, TProperty> : TypedPropertyAccessor<TOwner, TProperty>, ITypedPropertyAccessor<TOwner, TProperty> {
 		private readonly Action<TOwner, TProperty> setter;
 		private readonly TProperty defaultValue;
 

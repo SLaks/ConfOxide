@@ -10,7 +10,7 @@ namespace ConfOxide.MemberAccess {
 	///<summary>A PropertyAccessor for properties that hold nested <see cref="SettingsBase{T}"/> classes.</summary>
 	public class NestedPropertyAccessor<TOwner, TProperty> :
 		TypedPropertyAccessor<TOwner, TProperty>,
-		IPropertyAccessor<TOwner>
+		ITypedPropertyAccessor<TOwner, TProperty>
 		where TProperty : SettingsBase<TProperty> {
 		private readonly Action<TOwner> initializer;
 

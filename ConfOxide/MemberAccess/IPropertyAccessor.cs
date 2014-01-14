@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 namespace ConfOxide.MemberAccess {
 	///<summary>Describes and manipulates a specific property in a settings class.</summary>
 	///<typeparam name="T">The type that owns the property.</typeparam>
-	public interface IPropertyAccessor<T> {
+	public interface IPropertyAccessor<in T> {
 		///<summary>Gets the property being accessed.</summary>
 		PropertyInfo Property { get; }
 		///<summary>Gets the name to use when serializing this property to JSON.</summary>
@@ -29,5 +29,10 @@ namespace ConfOxide.MemberAccess {
 
 		///<summary>Updates the value of a JProperty to reflect this property's value.</summary>
 		void UpdateJsonProperty(T instance, JProperty jsonProperty);
+	}
+	///<summary>A strongly-typed <see cref="IPropertyAccessor{TOwner}"/> that exposes the property's value.</summary>
+	public interface ITypedPropertyAccessor<in TOwner, out TProperty> : IPropertyAccessor<TOwner> {
+		///<summary>Gets the value of this property from the specified instance.</summary>
+		TProperty GetValue(TOwner instance);
 	}
 }
