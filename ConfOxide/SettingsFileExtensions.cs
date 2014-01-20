@@ -28,14 +28,14 @@ namespace ConfOxide {
 				if (stream.Length == 0)
 					json = new JObject();
 				else {
-					var reader = new StreamReader(stream);  // Do not dipose this, to avoid closing the stream.
+					var reader = new StreamReader(stream);  // Do not dispose this, to avoid closing the stream.
 					encoding = reader.CurrentEncoding ?? encoding;
 					json = JObject.Load(new JsonTextReader(reader) { CloseInput = false });
 					stream.SetLength(0);
 				}
 				source.UpdateJson(json);
 
-				using (var writer = new JsonTextWriter(new StreamWriter(stream, encoding)))
+				using (var writer = new JsonTextWriter(new StreamWriter(stream, encoding)) { Formatting = Formatting.Indented })
 					json.WriteTo(writer);
 			}
 			return source;
