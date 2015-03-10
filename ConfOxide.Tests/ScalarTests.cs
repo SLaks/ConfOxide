@@ -17,6 +17,9 @@ namespace ConfOxide.Tests {
 		}
 
 		sealed class DefaultValues : SettingsBase<DefaultValues> {
+			static int IgnoreThisProperty { get; set; }
+			public static int IgnoreThisToo { get { return IgnoreThisProperty; } }
+
 			[DefaultValue(null)]
 			public byte? DefNull { get; set; }
 

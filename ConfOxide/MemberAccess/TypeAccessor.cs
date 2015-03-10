@@ -29,7 +29,7 @@ namespace ConfOxide.MemberAccess {
 		static TypeAccessor() {
 			var errors = new List<string>();
 			if (typeof(T).IsGenericType) {
-				if (!typeof(T).IsSettingsType() // Check that we eventually inherit SettingsBase<T>
+				if (!typeof(T).IsSettingsType()	// Check that we eventually inherit SettingsBase<T>
 				 || typeof(T).BaseType.GetGenericArguments()[0] != typeof(T).GetGenericArguments()[0]
 				 || typeof(T).GetGenericParameterConstraints().FirstOrDefault() != typeof(T))
 					errors.Add("Intermediary settings classes must follow the CRTP: class Layer<T> : SettingsBase<T> where T : Layer<T>");
@@ -39,7 +39,7 @@ namespace ConfOxide.MemberAccess {
 
 			var propInfos = typeof(T).GetProperties();
 			var props = new List<IPropertyAccessor<T>>(propInfos.Length);
-			foreach (var prop in propInfos) {
+			foreach (var prop in propInfos.Where(p => p.GetGetMethod() != null && !p.GetGetMethod().IsStatic)) {
 				if (prop.PropertyType.IsArray) {
 					errors.Add("Array types are not supported (since they aren't resizable).  Instead, use List<T>.");
 					return;
