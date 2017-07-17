@@ -1,9 +1,9 @@
-#ConfOxide
+# ConfOxide
 ConfOxide is a library for writing settings classes.  You can define your classes using simple C# auto-implemented properties, and ConfOxide will let you easily clone them, compare them, reset them, or save them to (and load them from) JSON files.
 
 Install ConfOxide from [NuGet](https://www.nuget.org/packages/ConfOxide/).
 
-#Example
+# Example
 First, create a settings class:
 
 ```CSharp
@@ -25,30 +25,30 @@ sealed class MyAppSettings : SettingsBase<MyAppSettings> {
 
 Note that concrete settings classes must be `sealed`.  To create an inheritable settings class, you must add a type parameter; see below.
 
-##Usage
+## Usage
 To create a new settings type, just write `new MyAppSettings()`.  All collection & settings properties will be initialized to new instances, and all properties will be set to their default values.  All settings methods are implemented as extension methods in the `ConfOxide.SettingsExtensions` class (for performance reasons); to call these methods, you will need to add `using ConfOxide`.
 
-##Working with JSON documents
+## Working with JSON documents
  - To read a settings file from JSON, call `settings.ReadJson(json)` and pass a JSON.net `JObject` instance with the data to read.
  - To update a JSON object from an existing settings instance, call `settings.UpdateJson(json)` and pass the `JObject` to update.  The existing property order, as well as any extra properties, will be preserved.
  - To create a new JSON object from an existing settings instance, call `settings.ToJson()`.
 
-##Working with JSON files
+## Working with JSON files
 ConfOxide also includes helper methods to read and write JSON files from disk.  Call `settings.ReadJsonFile(filename)` to read an existing JSON file, if it exists.  Call `settings.WriteJsonFile(filename)` to create or update a JSON file from the settings object
 
-##Working with Settings instances
+## Working with Settings instances
  - Call `settings.IsEquivalentTo(otherSettings)` to check whether two settings instances hold the same values.  This is a deep comparison that will recursively compare collections and nested settings objects by value.
  - Call `settings.AssignFrom(sourceSettings)` to deeply assign the values from one settings instance to another.
  - Call `settings.CreateCopy()` to create a deep clone of a settings instance.  (this is shorthand for `new YourSettingsClass().AssignFrom(settings)`
 
 These methods are particularly useful when creating cancellable Options dialogs.  You can call `settingsCreateCopy()` to bind your options dialog to a deep copy of the settings class, call `copy.IsEquivalentTo(copy)` to check whether there are any changes to apply, and call `settings.AssignFrom(copy)` to apply changes when clicking OK.
 
-##Supported types
+## Supported types
 ConfOxide supports properties of all basic .Net types, including primitive numeric types, `decimal`, `string`, `DateTime`, `DateTimeOffset`, and `TimeSpan`, all enums, as well as nullable types thereof.
 Properties containing other `SettingsBase<T>` classes are also supported, as long as there are no circular dependencies.
 ConfOxide also supports collection properties of other `SettingsBae<T>` classes or of supported scalar types.  You can use any collection class that is writable, variable-sized, and has a default constructor.  If you make a property of type `IList<T>`, ConfOxide will create a `List<T>` to assign to the property.  Note that arrays are not supported.
 
-#FAQ
+# FAQ
  - **Q: What does the name mean?**<br />
      A: ConfOxide is a portmanteau of &ldquo;Configuration&rdquo; and &ldquo;Carbon Dioxide&rdquo; (dry ice).  The point of this library is to allow [DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself "Don't Repeat Yourself") configuration classes.
 
@@ -81,5 +81,5 @@ sealed class MyAppSettings : VersionedSettingsBase<MyAppSettings> {
  - **Q: What about XML?**<br />
      A: If enough people are interested in serializing to XML in addition to JSON, I'll add support for that.
 
-#License
+# License
 [MIT](http://opensource.org/licenses/MIT)
