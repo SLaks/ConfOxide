@@ -29,7 +29,7 @@ Note that concrete settings classes must be `sealed`.  To create an inheritable 
 To create a new settings type, just write `new MyAppSettings()`.  All collection & settings properties will be initialized to new instances, and all properties will be set to their default values.  All settings methods are implemented as extension methods in the `ConfOxide.SettingsExtensions` class (for performance reasons); to call these methods, you will need to add `using ConfOxide`.
 
 ## Working with JSON documents
- - To read a settings file from JSON, call `settings.ReadJson(json)` and pass a JSON.net `JObject` instance with the data to read.
+ - To read a settings file from JSON, call `settings.ReadJson(json)` and pass a Json.NET `JObject` instance with the data to read.
  - To update a JSON object from an existing settings instance, call `settings.UpdateJson(json)` and pass the `JObject` to update.  The existing property order, as well as any extra properties, will be preserved.
  - To create a new JSON object from an existing settings instance, call `settings.ToJson()`.
 
@@ -41,12 +41,12 @@ ConfOxide also includes helper methods to read and write JSON files from disk.  
  - Call `settings.AssignFrom(sourceSettings)` to deeply assign the values from one settings instance to another.
  - Call `settings.CreateCopy()` to create a deep clone of a settings instance.  (this is shorthand for `new YourSettingsClass().AssignFrom(settings)`
 
-These methods are particularly useful when creating cancellable Options dialogs.  You can call `settingsCreateCopy()` to bind your options dialog to a deep copy of the settings class, call `copy.IsEquivalentTo(copy)` to check whether there are any changes to apply, and call `settings.AssignFrom(copy)` to apply changes when clicking OK.
+These methods are particularly useful when creating cancellable Options dialogs.  You can call `settings.CreateCopy()` to bind your options dialog to a deep copy of the settings class, call `copy.IsEquivalentTo(copy)` to check whether there are any changes to apply, and call `settings.AssignFrom(copy)` to apply changes when clicking OK.
 
 ## Supported types
 ConfOxide supports properties of all basic .Net types, including primitive numeric types, `decimal`, `string`, `DateTime`, `DateTimeOffset`, and `TimeSpan`, all enums, as well as nullable types thereof.
 Properties containing other `SettingsBase<T>` classes are also supported, as long as there are no circular dependencies.
-ConfOxide also supports collection properties of other `SettingsBae<T>` classes or of supported scalar types.  You can use any collection class that is writable, variable-sized, and has a default constructor.  If you make a property of type `IList<T>`, ConfOxide will create a `List<T>` to assign to the property.  Note that arrays are not supported.
+ConfOxide also supports collection properties of other `SettingsBase<T>` classes or of supported scalar types.  You can use any collection class that is writable, variable-sized, and has a default constructor.  If you make a property of type `IList<T>`, ConfOxide will create a `List<T>` to assign to the property.  Note that arrays are not supported.
 
 # FAQ
  - **Q: What does the name mean?**<br />
@@ -54,7 +54,7 @@ ConfOxide also supports collection properties of other `SettingsBae<T>` classes 
 
  - **Q: Wouldn't writing the serialization & cloning code by hand be faster?**<br />
      A: Nope!  
-   ConfOxide uses advanced techniques to compile strongly-typed accessor code at runtime, avoiding all boxing (except when saving to JSON; JSON.Net does not expose any way to save value types without boxing).  
+   ConfOxide uses advanced techniques to compile strongly-typed accessor code at runtime, avoiding all boxing (except when saving to JSON; Json.NET does not expose any way to save value types without boxing).  
 At the cost of a slight longer initialization time (to build the accessor code for each type using reflection), ConfOxide should be exactly as fast as code you write by hand.
 
  - **Q: Why are all of the utility methods defined as extension methods?**<br />
